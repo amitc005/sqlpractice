@@ -4,6 +4,8 @@
    about that statement, because If we execute this SQL line </br>
    `select cust_id from segments where active_flag = 'Y' and group by cust_id having count(cust_id) > 1` </br>
    We see the customers who have the multiple active records. Such as customer number '12064'
+2. I am assuming that in transaction table there is no final price value which is (qty * price)
+   </br> Therefore, some time, I am using qty * price formula.
 
 ## Answers:
 
@@ -63,6 +65,9 @@
             where update_at <= datetime("2016-03-01 23:59:59")
             group by cust_id having max(update_at)
         ```
+    * Comment: </br>
+        From my comment no. 1, I have shown my concern about the duplicate active_flag = 'Y'
+        records, so I am using having max(update_at) by to fetch the latest record.
 
 4. Find the most popular category (by revenue) for each active segment.
    *Hint*: The current (most up to date) active segment is specified by `active_flag = 'Y'` column in the segments table.
@@ -71,15 +76,15 @@
   	seg_name    category    revenue
 	INFREQUENT  Women       20264
 
-    Answer: `select products.category, sum(item_price) as revenue from transactions join products on transactions.prod_id = products.prod_id group by products.category` </br>
+    Answer: `select products.category, sum(item_price * item_qty) as revenue from transactions join products on transactions.prod_id = products.prod_id group by products.category` </br>
     Result:
 
         category    revenue
-        Accessories 1706.15
-        Make Up     26296.9200000004
-        Men         15791.9
-        Sun         1195.57
-        Women       55936.9399999995
+        Accessories 1756.86
+        Make Up     26734.2400000004
+        Men         16158.72
+        Sun         1268.74
+        Women       57269.7799999996
 
     Comment: </br>
         I have successfully determined which is the most popular category according to the customer expenditure. </br>
