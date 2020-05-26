@@ -15,7 +15,9 @@
         4402        LAPSED          2014-06-01 00:00:00
         11248       ONE-OFFS        2015-10-01 00:00:00
 
-    Answer: `SELECT segments.cust_id, segments.seg_name, segments.update_at FROM segments WHERE segments.active_flag = 'Y' group by cust_id having max(update_at)`
+    * Answer: `SELECT segments.cust_id, segments.seg_name, segments.update_at FROM segments WHERE segments.active_flag = 'Y' group by cust_id having max(update_at) order by update_at`
+    * Comment: From my comment no. 1, I can not use just active_flag = 'Y', because of multiple active rows for each customers. Therefore I used group by cust and bring
+    up the latest one by using having clause(PS: Sqllite viewer is brining the latest record without having clause, need to check with other vendors, MySQL, Postgres)
 
 2. For each product purchased between Jan 2016 and May 2016 (inclusive), find
    the number of distinct transactions.  The output should contain `prod_id`,
@@ -48,3 +50,24 @@
        from segments
        where update_at <= datetime("2016-03-01 23:59:59")
        group by cust_id having max(update_at)```
+
+4. Find the most popular category (by revenue) for each active segment.
+   *Hint*: The current (most up to date) active segment is specified by `active_flag = 'Y'` column in the segments table.
+   Here is the some sample output:
+
+  	seg_name    category    revenue
+	INFREQUENT  Women       20264
+
+    Answer: `select products.category, sum(item_price) as revenue from transactions join products on transactions.prod_id = products.prod_id group by products.category`
+    Result:
+
+        category    revenue
+        Accessories 1706.15
+        Make Up     26296.9200000004
+        Men         15791.9
+        Sun         1195.57
+        Women       55936.9399999995
+    Comment:
+        I have successfully determined which is the most popular category according to the customer expenditure.
+        But, I have faced a problem to join the segment table, because I can not determine products where were involved
+        in segmentation changes.
