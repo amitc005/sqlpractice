@@ -85,3 +85,12 @@
         I have successfully determined which is the most popular category according to the customer expenditure. </br>
         But, I have faced a problem to join the segment table, because I can not determine products where were involved
         in segmentation changes.
+
+
+## Testing Answer 1, 2, and 3
+* I have added test.py file to verify answer 1 to 3, checked Sql clauses which could go wrong if we use them in a wrong way.
+* To run the test script, please make sure you have python 3.6+
+* Run on your terminal ( make sure you are inside the directory.)
+    ```
+        $ python test.py
+    ```
